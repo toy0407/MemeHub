@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
+import '../../dependency_injection.dart';
+import '../../presentation/bloc/meme_bloc.dart';
 import '../../presentation/pages/home_page.dart';
 import '../../presentation/pages/saved_memes_page.dart';
 
@@ -13,7 +15,9 @@ class AppRouter {
       GoRoute(
         path: '/home',
         parentNavigatorKey: rootNavigatorKey,
-        builder: (context, state) => const HomePage(),
+        builder: (context, state) => HomePage(
+          memeBloc: sl<MemeBloc>(),
+        ),
       ),
       GoRoute(
         path: '/saved',

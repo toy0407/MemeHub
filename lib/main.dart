@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
 
     return MultiBlocProvider(
       providers: [
-        BlocProvider<MemeBloc>(create: (_) => di.sl<MemeBloc>()..appStarted()),
+        BlocProvider<MemeBloc>(create: (_) => di.sl<MemeBloc>()),
       ],
       child: MaterialApp.router(
         title: 'MemeHub',

@@ -7,22 +7,32 @@ abstract class MemeState extends Equatable {
   List<Object> get props => [];
 }
 
+abstract class MemeActionState extends MemeState {
+  const MemeActionState();
+}
+
 class MemeInitial extends MemeState {}
 
 class MemeFetchLoading extends MemeState {}
 
-class MemeFetchSuccess extends MemeState {}
+class MemeFetchSuccess extends MemeState {
+  final List<Meme> memeList;
+  const MemeFetchSuccess({required this.memeList});
+}
 
 class MemeFetchFailure extends MemeState {}
 
-class MemeAppendSuccess extends MemeState {}
+class MemeAppendSuccess extends MemeActionState {
+  final List<Meme> memeList;
+  const MemeAppendSuccess({required this.memeList});
+}
 
-class MemeAppendFailure extends MemeState {}
+class MemeAppendFailure extends MemeActionState {}
 
-class MemeSaveSuccess extends MemeState {}
+class MemeSaveSuccess extends MemeActionState {}
 
-class MemeSaveFailure extends MemeState {}
+class MemeSaveFailure extends MemeActionState {}
 
-class MemeShareSuccess extends MemeState {}
+class MemeShareSuccess extends MemeActionState {}
 
-class MemeShareFailure extends MemeState {}
+class MemeShareFailure extends MemeActionState {}

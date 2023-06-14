@@ -8,10 +8,16 @@ import 'package:memehub/domain/usecases/fetch_memes_usecase.dart';
 import 'package:memehub/domain/usecases/save_meme_usecase.dart';
 import 'package:memehub/domain/usecases/share_meme_usecase.dart';
 import 'package:memehub/presentation/bloc/meme_bloc.dart';
+import 'package:memehub/presentation/pages/home_page.dart';
 
 final sl = GetIt.instance;
 
 Future<void> init() async {
+  //Page
+  sl.registerFactory<HomePage>(() => HomePage(
+        memeBloc: sl.call(),
+      ));
+
   //Bloc
   sl.registerFactory<MemeBloc>(() => MemeBloc(
       saveMemeUseCase: sl.call(),

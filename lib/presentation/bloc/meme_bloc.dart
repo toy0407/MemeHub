@@ -1,4 +1,4 @@
-// ignore_for_file: invalid_use_of_visible_for_testing_member
+import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -23,67 +23,56 @@ class MemeBloc extends Bloc<MemeEvent, MemeState> {
       required this.fetchMemesUseCase,
       required this.appendMemesUseCase})
       : super(MemeInitial()) {
-    // on<MemeEvent>((event, emit) {
-    //   // TODO: implement event handler
-    // });
+    on<SaveMemeEvent>(saveMeme);
+    on<ShareMemeEvent>(shareMeme);
+    on<FetchMemesEvent>(fetchMemes);
+    on<AppendMemesEvent>(appendMemes);
   }
 
-  Future<void> appStarted() async {
-    emit(MemeFetchLoading());
-  }
-
-  Future<List<Meme>> fetchMemes() async {
-    List<Meme> memeList = [];
-    emit(MemeFetchLoading());
+  FutureOr<void> saveMeme(SaveMemeEvent event, Emitter<MemeState> emit) async {
     try {
-      var result = await fetchMemesUseCase.fetchMemes();
-      result.fold((failure) => MemeFetchFailure(), (success) {
-        emit(MemeFetchSuccess());
-        memeList = success;
-      });
-    } catch (err) {
-      emit(MemeFetchFailure());
-    }
-
-    return memeList;
-  }
-
-  Future<List<Meme>> appendMemes(List<Meme> existingList) async {
-    try {
-      var result = await appendMemesUseCase.appendMemes(existingList);
-      result.fold((failure) => MemeFetchFailure(), (success) {
-        emit(MemeAppendSuccess());
-        existingList = success;
-      });
-    } catch (err) {
-      emit(MemeAppendFailure());
-    }
-
-    return existingList;
-  }
-
-  Future<bool> saveMeme(Meme meme) async {
-    bool saveResult = false;
-    try {
-      var result = await saveMemeUseCase.saveMeme(meme);
+      var result = await saveMemeUseCase.saveMeme(event.meme);
       result.fold((failure) => emit(MemeSaveFailure()), (success) {
-        saveResult = success;
         emit(MemeSaveSuccess());
       });
     } catch (err) {
       emit(MemeSaveFailure());
     }
-
-    return saveResult;
   }
 
-  Future<void> shareMeme(Meme meme) async {
+  FutureOr<void> shareMeme(
+      ShareMemeEvent event, Emitter<MemeState> emit) async {
     try {
-      var result = await shareMemeUseCase.shareMeme(meme);
+      var result = await shareMemeUseCase.shareMeme(event.meme);
       result.fold((failure) => emit(MemeShareFailure()),
           (success) => emit(MemeShareSuccess()));
     } catch (err) {
       emit(MemeShareFailure());
+    }
+  }
+
+  FutureOr<void> fetchMemes(
+      FetchMemesEvent event, Emitter<MemeState> emit) async {
+    emit(MemeFetchLoading());
+    try {
+      var result = await fetchMemesUseCase.fetchMemes();
+      result.fold((failure) => emit(MemeFetchFailure()), (success) {
+        emit(MemeFetchSuccess(memeList: success));
+      });
+    } catch (err) {
+      emit(MemeFetchFailure());
+    }
+  }
+
+  FutureOr<void> appendMemes(
+      AppendMemesEvent event, Emitter<MemeState> emit) async {
+    try {
+      var result = await appendMemesUseCase.appendMemes(event.memeList);
+      result.fold((failure) => emit(MemeAppendFailure()), (success) {
+        emit(MemeAppendSuccess(memeList: success));
+      });
+    } catch (err) {
+      emit(MemeAppendFailure());
     }
   }
 }
