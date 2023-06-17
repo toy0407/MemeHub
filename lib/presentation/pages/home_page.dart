@@ -146,7 +146,7 @@ class _HomePageState extends State<HomePage> {
       ),
       IconButton(
         onPressed: () {
-          widget.memeBloc.add(SaveMemeEvent(meme: memeList[currentMeme]));
+          //TODO:Implement create new meme
         },
         icon: const Icon(
           Icons.add_box_outlined,
@@ -156,7 +156,7 @@ class _HomePageState extends State<HomePage> {
       ),
       IconButton(
         onPressed: () {
-          //TODO:Implement create new meme
+          widget.memeBloc.add(ShareMemeEvent(meme: memeList[currentMeme]));
         },
         icon: const Icon(Icons.share),
         color: Colors.amber,
