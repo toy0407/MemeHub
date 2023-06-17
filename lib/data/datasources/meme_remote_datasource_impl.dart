@@ -36,7 +36,7 @@ class MemeRemoteDataSourceImpl implements MemeRemoteDataSource {
       final imageName = path.basename(meme.url!);
       File image = File(path.join(tempDir.path, imageName));
       await image.writeAsBytes(response.bodyBytes);
-      await Share.shareFiles([path.join(tempDir.path, imageName)]);
+      await Share.shareXFiles([XFile(path.join(tempDir.path, imageName))]);
     } catch (err) {
       throw Exception();
     }
