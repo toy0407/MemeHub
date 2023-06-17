@@ -16,7 +16,7 @@ class _ProfileSettingsPageState extends State<ProfilePage> {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
-        title: const Text('MemeHub'),
+        title: const Text('Profile'),
         titleTextStyle: const TextStyle(
             fontSize: 32, color: Colors.amber, fontWeight: FontWeight.w200),
         backgroundColor: Colors.transparent,

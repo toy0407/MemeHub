@@ -42,8 +42,11 @@ class _HomePageState extends State<HomePage> {
           )
         ],
       ),
-      body: BlocListener<MemeBloc, MemeState>(
-          bloc: widget.memeBloc, listener: (context, state) {}, child: _body()),
+      body: _body(),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {},
+      // ),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 
@@ -134,23 +137,26 @@ class _HomePageState extends State<HomePage> {
         color: Colors.amber,
         iconSize: 36,
       ),
-      BlocBuilder<MemeBloc, MemeState>(
-        builder: (context, state) {
-          return IconButton(
-            onPressed: () {
-              // BlocProvider.of<MemeBloc>(context)
-              //     .saveMeme(memeList[currentMeme]);
-              widget.memeBloc.add(SaveMemeEvent(meme: memeList[currentMeme]));
-            },
-            icon: const Icon(Icons.save_alt),
-            color: Colors.amber,
-          );
+      IconButton(
+        onPressed: () {
+          widget.memeBloc.add(SaveMemeEvent(meme: memeList[currentMeme]));
         },
+        icon: const Icon(Icons.save_alt),
+        color: Colors.amber,
       ),
       IconButton(
         onPressed: () {
-          // BlocProvider.of<MemeBloc>(context).shareMeme(memeList[currentMeme]);
-          widget.memeBloc.add(ShareMemeEvent(meme: memeList[currentMeme]));
+          widget.memeBloc.add(SaveMemeEvent(meme: memeList[currentMeme]));
+        },
+        icon: const Icon(
+          Icons.add_box_outlined,
+          size: 28,
+        ),
+        color: Colors.amber,
+      ),
+      IconButton(
+        onPressed: () {
+          //TODO:Implement create new meme
         },
         icon: const Icon(Icons.share),
         color: Colors.amber,
@@ -159,7 +165,6 @@ class _HomePageState extends State<HomePage> {
         onPressed: () {
           if (currentMeme != sizeOfMemeList - 1) {
             if (currentMeme > sizeOfMemeList - 2 - 1) {
-              // BlocProvider.of<MemeBloc>(context).appendMemes(memeList);
               widget.memeBloc.add(AppendMemesEvent(memeList: memeList));
             }
             setState(() {
