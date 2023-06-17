@@ -19,7 +19,7 @@ Future<void> init() async {
       ));
 
   //Bloc
-  sl.registerFactory<MemeBloc>(() => MemeBloc(
+  sl.registerLazySingleton<MemeBloc>(() => MemeBloc(
       saveMemeUseCase: sl.call(),
       shareMemeUseCase: sl.call(),
       fetchMemesUseCase: sl.call(),

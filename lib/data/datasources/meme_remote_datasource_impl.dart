@@ -17,9 +17,9 @@ class MemeRemoteDataSourceImpl implements MemeRemoteDataSource {
   Future<bool> saveMeme(Meme meme) async {
     try {
       final response = await http.get(Uri.parse(meme.url!));
-      Directory? imageDir = await getExternalStorageDirectory();
+      Directory? imageDir = await getApplicationDocumentsDirectory();
       final imageName = path.basename(meme.url!);
-      File image = File(path.join(imageDir!.path, imageName));
+      File image = File(path.join(imageDir.path, imageName));
       await image.writeAsBytes(response.bodyBytes);
       return true;
     } catch (err) {

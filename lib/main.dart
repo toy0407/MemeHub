@@ -26,9 +26,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp.router(
         title: 'MemeHub',
         themeMode: ThemeMode.dark,
-        theme: ThemeData(
-          primarySwatch: Colors.amber,
-        ),
+        theme: ThemeData(primarySwatch: Colors.amber),
         darkTheme: ThemeData(primarySwatch: Colors.amber),
         routerConfig: router,
       ),
