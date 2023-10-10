@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:memehub/presentation/pages/image_viewer_page.dart';
 import 'package:path_provider/path_provider.dart';
 
 class SavedMemesWidget extends StatefulWidget {
@@ -52,10 +53,17 @@ class _SavedMemesWidgetState extends State<SavedMemesWidget> {
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2),
           itemBuilder: (context, index) {
-            return Card(
-              child: Image.file(
-                images[index],
-                fit: BoxFit.fill,
+            return GestureDetector(
+              child: Card(
+                child: Image.file(
+                  images[index],
+                  fit: BoxFit.fill,
+                ),
+              ),
+              onTap: () => Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => ImageViewerPage(image: images[index]),
+                ),
               ),
             );
           },

@@ -16,12 +16,20 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int currentMeme = 0;
   late List<Meme> memeList;
-  int sizeOfMemeList = 0;
+  // int sizeOfMemeList = 0;
+  late PageController _pageController;
 
   @override
   void initState() {
     super.initState();
+    _pageController = PageController();
     widget.memeBloc.add(FetchMemesEvent());
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _pageController.dispose();
   }
 
   @override
@@ -66,22 +74,41 @@ class _HomePageState extends State<HomePage> {
               builder: (context, state) {
                 if (state is MemeFetchSuccess) {
                   memeList = state.memeList;
-                  return Image.network(
-                    memeList[currentMeme].url!,
-                    loadingBuilder: (context, child, loadingProgress) {
-                      if (loadingProgress == null) return child;
-                      return Center(
-                        child: CircularProgressIndicator(
-                          value: loadingProgress.expectedTotalBytes != null
-                              ? loadingProgress.cumulativeBytesLoaded /
-                                  loadingProgress.expectedTotalBytes!
-                              : null,
-                        ),
-                      );
-                    },
-                    errorBuilder: (context, error, stackTrace) =>
-                        const Center(child: Text('Failed to load image')),
-                  );
+                  return PageView.builder(
+                      controller: _pageController,
+                      itemCount: memeList.length,
+                      onPageChanged: (index) {
+                        currentMeme = index;
+                        print(index);
+
+                        if (currentMeme == memeList.length - 1 - 2) {
+                          widget.memeBloc
+                              .add(AppendMemesEvent(memeList: memeList));
+                          print(memeList.length);
+                        }
+                        if (currentMeme == memeList.length - 1) {
+                          //TODO: Fix the scrolling when it reaches the end of memeList
+                        }
+                      },
+                      itemBuilder: (context, index) {
+                        return Image.network(
+                          memeList[index].url!,
+                          loadingBuilder: (context, child, loadingProgress) {
+                            if (loadingProgress == null) return child;
+                            return Center(
+                              child: CircularProgressIndicator(
+                                value: loadingProgress.expectedTotalBytes !=
+                                        null
+                                    ? loadingProgress.cumulativeBytesLoaded /
+                                        loadingProgress.expectedTotalBytes!
+                                    : null,
+                              ),
+                            );
+                          },
+                          errorBuilder: (context, error, stackTrace) =>
+                              const Center(child: Text('Failed to load image')),
+                        );
+                      });
                 } else if (state is MemeFetchLoading) {
                   return const Center(child: CircularProgressIndicator());
                 } else if (state is MemeFetchFailure) {
@@ -125,18 +152,18 @@ class _HomePageState extends State<HomePage> {
 
   List<Widget> navbar() {
     return [
-      IconButton(
-        onPressed: () {
-          if (currentMeme > 0) {
-            setState(() {
-              currentMeme--;
-            });
-          }
-        },
-        icon: const Icon(Icons.keyboard_double_arrow_left_outlined),
-        color: Colors.amber,
-        iconSize: 36,
-      ),
+      // IconButton(
+      //   onPressed: () {
+      //     if (currentMeme > 0) {
+      //       setState(() {
+      //         currentMeme--;
+      //       });
+      //     }
+      //   },
+      //   icon: const Icon(Icons.keyboard_double_arrow_left_outlined),
+      //   color: Colors.amber,
+      //   iconSize: 36,
+      // ),
       IconButton(
         onPressed: () {
           widget.memeBloc.add(SaveMemeEvent(meme: memeList[currentMeme]));
@@ -161,21 +188,21 @@ class _HomePageState extends State<HomePage> {
         icon: const Icon(Icons.share),
         color: Colors.amber,
       ),
-      IconButton(
-        onPressed: () {
-          if (currentMeme != sizeOfMemeList - 1) {
-            if (currentMeme > sizeOfMemeList - 2 - 1) {
-              widget.memeBloc.add(AppendMemesEvent(memeList: memeList));
-            }
-            setState(() {
-              currentMeme++;
-            });
-          }
-        },
-        icon: const Icon(Icons.keyboard_double_arrow_right_outlined),
-        color: Colors.amber,
-        iconSize: 36,
-      ),
+      // IconButton(
+      //   onPressed: () {
+      //     if (currentMeme <= memeList.length - 1) {
+      //       if (currentMeme > memeList.length - 2 - 1) {
+      //         widget.memeBloc.add(AppendMemesEvent(memeList: memeList));
+      //       }
+      //       setState(() {
+      //         currentMeme++;
+      //       });
+      //     }
+      //   },
+      //   icon: const Icon(Icons.keyboard_double_arrow_right_outlined),
+      //   color: Colors.amber,
+      //   iconSize: 36,
+      // ),
     ];
   }
 }

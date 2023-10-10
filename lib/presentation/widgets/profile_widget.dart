@@ -11,17 +11,29 @@ class _ProfileWidgetState extends State<ProfileWidget> {
   @override
   Widget build(BuildContext context) {
     return const SizedBox(
-      height: 200,
-      child: Column(children: [
-        Text(
-          'Name',
-          style: TextStyle(color: Colors.amber),
+      child: Padding(
+        padding: EdgeInsets.all(8.0),
+        child: Row(
+          children: [
+            CircleAvatar(
+              radius: 60,
+            ),
+            Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Column(children: [
+                Text(
+                  'Name',
+                  style: TextStyle(color: Colors.amber),
+                ),
+                Text(
+                  'Email',
+                  style: TextStyle(color: Colors.amber),
+                ),
+              ]),
+            ),
+          ],
         ),
-        Text(
-          'Email',
-          style: TextStyle(color: Colors.amber),
-        ),
-      ]),
+      ),
     );
   }
 }
